@@ -36,8 +36,44 @@ const router = express.Router({ mergeParams: true }); // clubId 파라미터 접
  *     responses:
  *       200:
  *         description: 게시판 목록 반환
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 boards:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       name:
+ *                         type: string
+ *                       description:
+ *                         type: string
+ *                       club:
+ *                         type: string
+ *                       isActive:
+ *                         type: boolean
+ *                       createdBy:
+ *                         type: string
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                       updatedAt:
+ *                         type: string
+ *                         format: date-time
  *       404:
  *         description: 동아리를 찾을 수 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "동아리를 찾을 수 없습니다."
  */
 router.get('/', authenticate, isClubMember, getBoards);
 
@@ -64,8 +100,42 @@ router.get('/', authenticate, isClubMember, getBoards);
  *     responses:
  *       200:
  *         description: 게시판 정보 반환
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 board:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     description:
+ *                       type: string
+ *                     club:
+ *                       type: string
+ *                     isActive:
+ *                       type: boolean
+ *                     createdBy:
+ *                       type: string
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
  *       404:
  *         description: 게시판 또는 동아리를 찾을 수 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "게시판을 찾을 수 없습니다."
  */
 router.get('/:boardId', authenticate, isClubMember, getBoardById);
 
@@ -102,10 +172,55 @@ router.get('/:boardId', authenticate, isClubMember, getBoardById);
  *     responses:
  *       201:
  *         description: 게시판 생성 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "게시판이 생성되었습니다."
+ *                 board:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     description:
+ *                       type: string
+ *                     club:
+ *                       type: string
+ *                     isActive:
+ *                       type: boolean
+ *                     createdBy:
+ *                       type: string
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
  *       400:
  *         description: 이미 존재하는 게시판 이름
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "이미 동일한 이름의 게시판이 존재합니다."
  *       403:
  *         description: 권한 없음 (관리자가 아님)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "동아리 관리자만 이 작업을 수행할 수 있습니다."
  */
 router.post('/', authenticate, isClubAdmin, createBoard);
 
@@ -147,12 +262,65 @@ router.post('/', authenticate, isClubAdmin, createBoard);
  *     responses:
  *       200:
  *         description: 게시판 수정 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "게시판이 수정되었습니다."
+ *                 board:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     description:
+ *                       type: string
+ *                     club:
+ *                       type: string
+ *                     isActive:
+ *                       type: boolean
+ *                     createdBy:
+ *                       type: string
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
  *       400:
  *         description: 이미 존재하는 게시판 이름
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "이미 동일한 이름의 게시판이 존재합니다."
  *       403:
  *         description: 권한 없음 (관리자가 아님)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "동아리 관리자만 이 작업을 수행할 수 있습니다."
  *       404:
  *         description: 게시판을 찾을 수 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "게시판을 찾을 수 없습니다."
  */
 router.put('/:boardId', authenticate, isClubAdmin, updateBoard);
 
@@ -179,11 +347,35 @@ router.put('/:boardId', authenticate, isClubAdmin, updateBoard);
  *     responses:
  *       200:
  *         description: 게시판 삭제 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "게시판이 삭제되었습니다."
  *       403:
  *         description: 권한 없음 (관리자가 아님)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "동아리 관리자만 이 작업을 수행할 수 있습니다."
  *       404:
  *         description: 게시판을 찾을 수 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "게시판을 찾을 수 없습니다."
  */
 router.delete('/:boardId', authenticate, isClubAdmin, deleteBoard);
 
-export default router; 
+export default router;

@@ -34,10 +34,82 @@ router.use(authenticate, isAdmin);
  *     responses:
  *       200:
  *         description: 동아리 목록 반환
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 clubs:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                       description:
+ *                         type: string
+ *                       category:
+ *                         type: string
+ *                       imageUrl:
+ *                         type: string
+ *                       owner:
+ *                         type: object
+ *                         properties:
+ *                           username:
+ *                             type: string
+ *                           email:
+ *                             type: string
+ *                       members:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             user:
+ *                               type: object
+ *                               properties:
+ *                                 username:
+ *                                   type: string
+ *                                 email:
+ *                                   type: string
+ *                             role:
+ *                               type: string
+ *                               enum: [owner, admin, member, pending]
+ *                             joinedAt:
+ *                               type: string
+ *                               format: date-time
+ *             examples:
+ *               example1:
+ *                 value:
+ *                   clubs:
+ *                     - name: "Coding Club"
+ *                       description: "A club for coding enthusiasts"
+ *                       category: "Technology"
+ *                       imageUrl: "http://example.com/image.png"
+ *                       owner:
+ *                         username: "admin"
+ *                         email: "admin@example.com"
+ *                       members:
+ *                         - user:
+ *                             username: "member1"
+ *                             email: "member1@example.com"
+ *                           role: "member"
+ *                           joinedAt: "2023-10-01T12:00:00Z"
  *       401:
  *         description: 인증되지 않음
+ *         content:
+ *           application/json:
+ *             examples:
+ *               example1:
+ *                 value:
+ *                   message: "인증이 필요합니다."
  *       403:
  *         description: 관리자 권한 없음
+ *         content:
+ *           application/json:
+ *             examples:
+ *               example1:
+ *                 value:
+ *                   message: "관리자 권한이 필요합니다."
  */
 router.get('/clubs', getAllClubs);
 
@@ -59,8 +131,72 @@ router.get('/clubs', getAllClubs);
  *     responses:
  *       200:
  *         description: 동아리 정보 반환
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 club:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                     description:
+ *                       type: string
+ *                     category:
+ *                       type: string
+ *                     imageUrl:
+ *                       type: string
+ *                     owner:
+ *                       type: object
+ *                       properties:
+ *                         username:
+ *                           type: string
+ *                         email:
+ *                           type: string
+ *                     members:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           user:
+ *                             type: object
+ *                             properties:
+ *                               username:
+ *                                 type: string
+ *                               email:
+ *                                 type: string
+ *                           role:
+ *                             type: string
+ *                             enum: [owner, admin, member, pending]
+ *                           joinedAt:
+ *                             type: string
+ *                             format: date-time
+ *             examples:
+ *               example1:
+ *                 value:
+ *                   club:
+ *                     name: "Coding Club"
+ *                     description: "A club for coding enthusiasts"
+ *                     category: "Technology"
+ *                     imageUrl: "http://example.com/image.png"
+ *                     owner:
+ *                       username: "admin"
+ *                       email: "admin@example.com"
+ *                     members:
+ *                       - user:
+ *                           username: "member1"
+ *                           email: "member1@example.com"
+ *                         role: "member"
+ *                         joinedAt: "2023-10-01T12:00:00Z"
  *       404:
  *         description: 동아리를 찾을 수 없음
+ *         content:
+ *           application/json:
+ *             examples:
+ *               example1:
+ *                 value:
+ *                   message: "동아리를 찾을 수 없습니다."
  */
 router.get('/clubs/:id', getClubById);
 
@@ -103,6 +239,39 @@ router.get('/clubs/:id', getClubById);
  *     responses:
  *       201:
  *         description: 동아리 생성 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 club:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                     description:
+ *                       type: string
+ *                     category:
+ *                       type: string
+ *                     imageUrl:
+ *                       type: string
+ *                     owner:
+ *                       type: string
+ *                     isPrivate:
+ *                       type: boolean
+ *                     members:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           user:
+ *                             type: string
+ *                           role:
+ *                             type: string
+ *                             enum: [owner, admin, member, pending]
+ *                           joinedAt:
+ *                             type: string
+ *                             format: date-time
  */
 router.post('/clubs', createClub);
 
@@ -147,6 +316,41 @@ router.post('/clubs', createClub);
  *     responses:
  *       200:
  *         description: 동아리 정보 업데이트 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 club:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                     description:
+ *                       type: string
+ *                     category:
+ *                       type: string
+ *                     imageUrl:
+ *                       type: string
+ *                     owner:
+ *                       type: string
+ *                     isActive:
+ *                       type: boolean
+ *                     isPrivate:
+ *                       type: boolean
+ *                     members:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           user:
+ *                             type: string
+ *                           role:
+ *                             type: string
+ *                             enum: [owner, admin, member, pending]
+ *                           joinedAt:
+ *                             type: string
+ *                             format: date-time
  */
 router.put('/clubs/:id', updateClub);
 
@@ -168,6 +372,13 @@ router.put('/clubs/:id', updateClub);
  *     responses:
  *       200:
  *         description: 동아리 삭제 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 router.delete('/clubs/:id', deleteClub);
 
@@ -189,6 +400,31 @@ router.delete('/clubs/:id', deleteClub);
  *     responses:
  *       200:
  *         description: 동아리 회원 목록 반환
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 members:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       user:
+ *                         type: object
+ *                         properties:
+ *                           username:
+ *                             type: string
+ *                           email:
+ *                             type: string
+ *                           profileImage:
+ *                             type: string
+ *                       role:
+ *                         type: string
+ *                         enum: [owner, admin, member, pending]
+ *                       joinedAt:
+ *                         type: string
+ *                         format: date-time
  *       404:
  *         description: 동아리를 찾을 수 없음
  */
@@ -233,6 +469,24 @@ router.get('/clubs/:id/members', getClubMembers);
  *     responses:
  *       200:
  *         description: 회원 상태 변경 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 member:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       type: string
+ *                     role:
+ *                       type: string
+ *                       enum: [owner, admin, member, pending]
+ *                     joinedAt:
+ *                       type: string
+ *                       format: date-time
  *       400:
  *         description: 잘못된 요청
  *       404:

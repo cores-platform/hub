@@ -51,6 +51,46 @@ const router = express.Router();
  *     responses:
  *       201:
  *         description: 사용자 등록 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     username:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     firstName:
+ *                       type: string
+ *                     lastName:
+ *                       type: string
+ *                     role:
+ *                       type: string
+ *       400:
+ *         description: 이미 사용 중인 이메일 또는 사용자 이름
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "이미 사용 중인 이메일 또는 사용자 이름입니다."
+ *       500:
+ *         description: 서버 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "사용자 생성 중 오류가 발생했습니다."
  */
 router.post('/register', createUser);
 
@@ -82,10 +122,41 @@ router.post('/register', createUser);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/LoginResponse'
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     username:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     role:
+ *                       type: string
  *       401:
  *         description: 인증 실패
- *     x-swagger-router-controller: "userController"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "이메일 또는 비밀번호가 올바르지 않습니다."
+ *       500:
+ *         description: 서버 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "로그인 중 오류가 발생했습니다."
  */
 router.post('/login', loginUser);
 
@@ -100,8 +171,48 @@ router.post('/login', loginUser);
  *     responses:
  *       200:
  *         description: 사용자 프로필 정보 반환
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     username:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     firstName:
+ *                       type: string
+ *                     lastName:
+ *                       type: string
+ *                     profileImage:
+ *                       type: string
+ *                     role:
+ *                       type: string
  *       401:
  *         description: 인증되지 않음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "인증이 필요합니다."
+ *       500:
+ *         description: 서버 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "프로필 조회 중 오류가 발생했습니다."
  */
 router.get('/profile', authenticate, getUserProfile);
 
@@ -128,8 +239,48 @@ router.get('/profile', authenticate, getUserProfile);
  *     responses:
  *       200:
  *         description: 프로필 업데이트 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     username:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     firstName:
+ *                       type: string
+ *                     lastName:
+ *                       type: string
+ *                     profileImage:
+ *                       type: string
+ *                     role:
+ *                       type: string
  *       401:
  *         description: 인증되지 않음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "인증이 필요합니다."
+ *       500:
+ *         description: 서버 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "프로필 업데이트 중 오류가 발생했습니다."
  */
 router.put('/profile', authenticate, updateUserProfile);
 
@@ -158,10 +309,44 @@ router.put('/profile', authenticate, updateUserProfile);
  *     responses:
  *       200:
  *         description: 비밀번호 변경 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "비밀번호가 변경되었습니다."
  *       400:
  *         description: 현재 비밀번호가 일치하지 않음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "현재 비밀번호가 일치하지 않습니다."
  *       401:
  *         description: 인증되지 않음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "인증이 필요합니다."
+ *       500:
+ *         description: 서버 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "비밀번호 변경 중 오류가 발생했습니다."
  */
 router.post('/change-password', authenticate, changePassword);
 

@@ -49,6 +49,49 @@ const router = express.Router();
  *     responses:
  *       200:
  *         description: 동아리 목록 반환
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 clubs:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       name:
+ *                         type: string
+ *                       description:
+ *                         type: string
+ *                       category:
+ *                         type: string
+ *                       imageUrl:
+ *                         type: string
+ *                       memberCount:
+ *                         type: integer
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     total:
+ *                       type: integer
+ *                     page:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *                     pages:
+ *                       type: integer
+ *       500:
+ *         description: 서버 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: '동아리 조회 중 오류가 발생했습니다.'
  */
 router.get('/', getAllClubs);
 
@@ -68,8 +111,100 @@ router.get('/', getAllClubs);
  *     responses:
  *       200:
  *         description: 동아리 정보 반환
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 club:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *                     description:
+ *                       type: string
+ *                     category:
+ *                       type: string
+ *                     imageUrl:
+ *                       type: string
+ *                     owner:
+ *                       type: object
+ *                       properties:
+ *                         username:
+ *                           type: string
+ *                         email:
+ *                           type: string
+ *                         profileImage:
+ *                           type: string
+ *                     isActive:
+ *                       type: boolean
+ *                     isPrivate:
+ *                       type: boolean
+ *                     memberCount:
+ *                       type: integer
+ *                     userMembershipStatus:
+ *                       type: string
+ *                     admins:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           username:
+ *                             type: string
+ *                           email:
+ *                             type: string
+ *                           profileImage:
+ *                             type: string
+ *                     members:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           username:
+ *                             type: string
+ *                           email:
+ *                             type: string
+ *                           profileImage:
+ *                             type: string
+ *                     pendingMembers:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           username:
+ *                             type: string
+ *                           email:
+ *                             type: string
+ *                           profileImage:
+ *                             type: string
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
  *       404:
  *         description: 동아리를 찾을 수 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: '동아리를 찾을 수 없습니다.'
+ *       500:
+ *         description: 서버 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: '동아리 조회 중 오류가 발생했습니다.'
  */
 router.get('/:id', getClubById);
 
@@ -91,10 +226,47 @@ router.get('/:id', getClubById);
  *     responses:
  *       200:
  *         description: 가입 신청 완료
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: '동아리에 성공적으로 가입했습니다.'
+ *                 role:
+ *                   type: string
+ *                   example: 'member'
  *       400:
  *         description: 이미 회원이거나 가입 신청 중
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: '이미 동아리에 가입했거나 가입 신청 중입니다.'
  *       404:
  *         description: 동아리를 찾을 수 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: '동아리를 찾을 수 없습니다.'
+ *       500:
+ *         description: 서버 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: '동아리 가입 중 오류가 발생했습니다.'
  */
 router.post('/:id/join', authenticate, joinClub);
 
@@ -116,10 +288,44 @@ router.post('/:id/join', authenticate, joinClub);
  *     responses:
  *       200:
  *         description: 탈퇴 완료
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: '동아리에서 탈퇴했습니다.'
  *       400:
  *         description: 회원이 아니거나 소유자는 탈퇴 불가
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: '동아리 소유자는 탈퇴할 수 없습니다. 먼저 소유권을 이전하세요.'
  *       404:
  *         description: 동아리를 찾을 수 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: '동아리를 찾을 수 없습니다.'
+ *       500:
+ *         description: 서버 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: '동아리 탈퇴 중 오류가 발생했습니다.'
  */
 router.post('/:id/leave', authenticate, leaveClub);
 
