@@ -1,4 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import MainLayout from './layouts/MainLayout';
 import HomeLayout from './layouts/HomeLayout';
 import AppLayout from './layouts/AppLayout';
@@ -14,6 +16,10 @@ function App() {
             <Route index element={<HomePage />} />
             {/* 홈 레이아웃을 사용하는 다른 페이지들 */}
           </Route>
+
+          {/* 인증 관련 라우트 */}
+          <Route path='login' element={<LoginPage />} />
+          <Route path='register' element={<RegisterPage />} />
 
           {/* 앱 관련 라우트 */}
           <Route path='app' element={<AppLayout />}>

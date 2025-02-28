@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import { useState } from 'react';
 
 const HomeLayout = () => {
@@ -18,33 +18,36 @@ const HomeLayout = () => {
 
           {/* 데스크톱 네비게이션 */}
           <nav className='hidden md:flex items-center space-x-8'>
-            <a
-              href='#'
+            <Link
+              to='/'
               className='text-slate-300 hover:text-white transition-colors'
             >
               동아리 찾기
-            </a>
-            <a
-              href='#'
+            </Link>
+            <Link
+              to='/popular'
               className='text-slate-300 hover:text-white transition-colors'
             >
               인기 동아리
-            </a>
-            <a
-              href='#'
+            </Link>
+            <Link
+              to='/events'
               className='text-slate-300 hover:text-white transition-colors'
             >
               행사 일정
-            </a>
-            <a
-              href='#'
+            </Link>
+            <Link
+              to='/community'
               className='text-slate-300 hover:text-white transition-colors'
             >
               커뮤니티
-            </a>
-            <button className='px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-700 transition-colors'>
+            </Link>
+            <Link
+              to='/login'
+              className='px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-700 transition-colors'
+            >
               로그인
-            </button>
+            </Link>
           </nav>
 
           {/* 모바일 메뉴 버튼 */}
@@ -82,33 +85,36 @@ const HomeLayout = () => {
         {isMenuOpen && (
           <div className='md:hidden bg-slate-800 border-b border-slate-700'>
             <div className='container mx-auto px-4 py-4 flex flex-col space-y-4'>
-              <a
-                href='#'
+              <Link
+                to='/'
                 className='text-slate-300 hover:text-white transition-colors py-2'
               >
                 동아리 찾기
-              </a>
-              <a
-                href='#'
+              </Link>
+              <Link
+                to='/popular'
                 className='text-slate-300 hover:text-white transition-colors py-2'
               >
                 인기 동아리
-              </a>
-              <a
-                href='#'
+              </Link>
+              <Link
+                to='/events'
                 className='text-slate-300 hover:text-white transition-colors py-2'
               >
                 행사 일정
-              </a>
-              <a
-                href='#'
+              </Link>
+              <Link
+                to='/community'
                 className='text-slate-300 hover:text-white transition-colors py-2'
               >
                 커뮤니티
-              </a>
-              <button className='px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-700 transition-colors'>
+              </Link>
+              <Link
+                to='/login'
+                className='px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-700 transition-colors'
+              >
                 로그인
-              </button>
+              </Link>
             </div>
           </div>
         )}
@@ -138,19 +144,28 @@ const HomeLayout = () => {
               </h4>
               <ul className='space-y-2 text-sm text-slate-400'>
                 <li>
-                  <a href='#' className='hover:text-white transition-colors'>
+                  <Link
+                    to='/register'
+                    className='hover:text-white transition-colors'
+                  >
                     동아리 등록
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href='#' className='hover:text-white transition-colors'>
+                  <Link
+                    to='/search'
+                    className='hover:text-white transition-colors'
+                  >
                     동아리 검색
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href='#' className='hover:text-white transition-colors'>
+                  <Link
+                    to='/events'
+                    className='hover:text-white transition-colors'
+                  >
                     행사 관리
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -160,19 +175,28 @@ const HomeLayout = () => {
               </h4>
               <ul className='space-y-2 text-sm text-slate-400'>
                 <li>
-                  <a href='#' className='hover:text-white transition-colors'>
+                  <Link
+                    to='/guide'
+                    className='hover:text-white transition-colors'
+                  >
                     가이드
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href='#' className='hover:text-white transition-colors'>
+                  <Link
+                    to='/faq'
+                    className='hover:text-white transition-colors'
+                  >
                     FAQ
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href='#' className='hover:text-white transition-colors'>
+                  <Link
+                    to='/notice'
+                    className='hover:text-white transition-colors'
+                  >
                     공지사항
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -180,19 +204,28 @@ const HomeLayout = () => {
               <h4 className='text-md font-medium mb-4 text-slate-300'>정보</h4>
               <ul className='space-y-2 text-sm text-slate-400'>
                 <li>
-                  <a href='#' className='hover:text-white transition-colors'>
+                  <Link
+                    to='/about'
+                    className='hover:text-white transition-colors'
+                  >
                     소개
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href='#' className='hover:text-white transition-colors'>
+                  <Link
+                    to='/terms'
+                    className='hover:text-white transition-colors'
+                  >
                     이용약관
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href='#' className='hover:text-white transition-colors'>
+                  <Link
+                    to='/privacy'
+                    className='hover:text-white transition-colors'
+                  >
                     개인정보처리방침
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
