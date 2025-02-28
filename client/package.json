@@ -1,0 +1,51 @@
+{
+  "name": "typescript",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "dependencies": {
+    "@tailwindcss/vite": "^4.0.9",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.2.0",
+    "tailwindcss": "^4.0.9"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.21.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.14",
+    "globals": "^15.12.0",
+    "npm-run-all": "^4.1.5",
+    "run-script-os": "^1.1.6",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.15.0",
+    "vite": "^6.2.0"
+  },
+  "scripts": {
+    "dev:web": "npm run vite",
+    "dev": "run-script-os",
+    "dev:windows": "npm-run-all --parallel vite start:python",
+    "dev:linux": "npm-run-all --parallel vite start:python",
+    "dev:macos": "npm-run-all --parallel vite start:python",
+    "vite": "vite",
+    "start:python": "run-script-os",
+    "start:python:windows": ".\\venv-pyloid\\Scripts\\python .\\src-pyloid\\main.py",
+    "start:python:linux": "./venv-pyloid/bin/python ./src-pyloid/main.py",
+    "start:python:macos": "./venv-pyloid/bin/python ./src-pyloid/main.py",
+    "build": "npm run build:front && npm run build:python",
+    "build:front": "tsc -b && vite build",
+    "build:python": "run-script-os",
+    "build:python:windows": ".\\venv-pyloid\\Scripts\\python .\\src-pyloid\\build.py",
+    "build:python:linux": "./venv-pyloid/bin/python ./src-pyloid/build.py",
+    "build:python:macos": "./venv-pyloid/bin/python ./src-pyloid/build.py",
+    "init": "npm install && npm run init:python",
+    "init:python": "run-script-os",
+    "init:python:windows": "python -m venv venv-pyloid && .\\venv-pyloid\\Scripts\\pip install -r requirements.txt",
+    "init:python:linux": "python3 -m venv venv-pyloid && ./venv-pyloid/bin/pip install -r requirements.txt",
+    "init:python:macos": "python3 -m venv venv-pyloid && ./venv-pyloid/bin/pip install -r requirements.txt"
+  }
+}
