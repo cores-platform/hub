@@ -17,9 +17,15 @@ import postRoutes from './routes/postRoutes';
 
 const app = express();
 
-// 미들웨어 설정
+// CORS 설정
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' ? 'https://pylon-app.com' : '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
-app.use(cors());
 app.use(helmet());
 app.use(
   morgan('dev', {
@@ -40,7 +46,7 @@ const swaggerOptions = {
       {
         url:
           process.env.NODE_ENV === 'production'
-            ? 'http://49.143.34.88:5000'
+            ? 'https://pylon-app.com'
             : 'http://localhost:5000',
         description: '개발 서버',
       },
