@@ -38,7 +38,10 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'http://localhost:5000',
+        url:
+          process.env.NODE_ENV === 'production'
+            ? 'http://49.143.34.88:5000'
+            : 'http://localhost:5000',
         description: '개발 서버',
       },
     ],
