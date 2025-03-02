@@ -457,7 +457,7 @@ router.post('/', authenticate, isClubMemberForPost, createPost);
  *       403:
  *         description: 권한 없음 (작성자 또는 관리자가 아님)
  *         content:
- *           application/json:!
+ *           application/json:
  *             schema:
  *               type: object
  *               properties:
