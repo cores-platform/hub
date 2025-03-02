@@ -23,6 +23,10 @@ import BoardsOverviewPage from '@/pages/board/BoardsOverviewPage';
 import BoardDetailPage from '@/pages/board/BoardDetailPage';
 import CreateBoardPage from '@/pages/board/CreateBoardPage';
 import EditBoardPage from '@/pages/board/EditBoardPage';
+import BoardPostsPage from './pages/post/BoardPostsPage';
+import PostDetailPage from './pages/post/PostDetailPage';
+import CreatePostPage from './pages/post/CreatePostPage';
+import EditPostPage from './pages/post/EditPostPage';
 
 function App() {
   const checkAuth = useAuthStore((state) => state.checkAuth);
@@ -81,8 +85,25 @@ function App() {
                 />
                 <Route
                   path="boards/:boardId"
-                  element={<BoardDetailPage />}
-                />
+                  // element={<BoardDetailPage />}
+                >
+                  <Route
+                    index
+                    element={<BoardPostsPage />}
+                  />
+                  <Route
+                    path="posts/create"
+                    element={<CreatePostPage />}
+                  />
+                  <Route
+                    path="posts/:postId"
+                    element={<PostDetailPage />}
+                  />
+                  <Route
+                    path="posts/:postId/edit"
+                    element={<EditPostPage />}
+                  />
+                </Route>
                 <Route
                   path="boards/:boardId/edit"
                   element={<EditBoardPage />}
