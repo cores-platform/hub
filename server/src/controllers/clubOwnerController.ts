@@ -66,7 +66,9 @@ export const transferOwnership = async (
     if (memberIndex === -1) {
       res
         .status(StatusCodes.BAD_REQUEST)
-        .json({ message: '소유권을 이전할 대상이 동아리 회원이 아닙니다.' });
+        .json({
+          message: '소유권을 이전할 대상이 동아리 회원이 아닙니다.',
+        });
       return;
     }
 
@@ -104,7 +106,9 @@ export const deleteClub = async (req: RequestWithClub, res: Response) => {
     const clubId = req.params.id;
     await Club.findByIdAndDelete(clubId);
 
-    res.status(StatusCodes.OK).json({ message: '동아리가 삭제되었습니다.' });
+    res
+      .status(StatusCodes.OK)
+      .json({ message: '동아리가 삭제되었습니다.' });
   } catch (error) {
     logger.error('동아리 삭제 오류:', error);
     res
@@ -249,7 +253,10 @@ export const kickMember = async (req: RequestWithClub, res: Response) => {
 };
 
 // 관리자 임명 (소유자)
-export const promoteToAdmin = async (req: RequestWithClub, res: Response) => {
+export const promoteToAdmin = async (
+  req: RequestWithClub,
+  res: Response
+) => {
   try {
     const { userId } = req.body;
     const clubId = req.params.id;
@@ -286,7 +293,10 @@ export const promoteToAdmin = async (req: RequestWithClub, res: Response) => {
 };
 
 // 관리자 해임 (소유자)
-export const demoteFromAdmin = async (req: RequestWithClub, res: Response) => {
+export const demoteFromAdmin = async (
+  req: RequestWithClub,
+  res: Response
+) => {
   try {
     const { userId } = req.body;
     const clubId = req.params.id;

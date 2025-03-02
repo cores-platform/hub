@@ -169,6 +169,9 @@ router.get('/:boardId', authenticate, isClubMember, getBoardById);
  *               description:
  *                 type: string
  *                 description: 게시판 설명
+ *               isActive:
+ *                 type: boolean
+ *                 description: 게시
  *     responses:
  *       201:
  *         description: 게시판 생성 성공

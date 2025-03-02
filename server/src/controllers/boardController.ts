@@ -13,12 +13,14 @@ interface RequestWithClub extends Request {
 export const getBoards = async (req: Request, res: Response) => {
   try {
     const clubId = req.params.clubId;
-    
-    const boards = await Board.find({ 
+
+    const boards = await Board.find({
       club: clubId,
-      isActive: true 
+      isActive: true,
     }).sort({ createdAt: -1 });
-    
+
+    console.log(boards);
+
     res.status(StatusCodes.OK).json({ boards });
   } catch (error) {
     logger.error('게시판 목록 조회 오류:', error);
@@ -32,19 +34,19 @@ export const getBoards = async (req: Request, res: Response) => {
 export const getBoardById = async (req: Request, res: Response) => {
   try {
     const boardId = req.params.boardId;
-    
-    const board = await Board.findOne({ 
+
+    const board = await Board.findOne({
       _id: boardId,
-      isActive: true 
+      isActive: true,
     });
-    
+
     if (!board) {
       res
         .status(StatusCodes.NOT_FOUND)
         .json({ message: '게시판을 찾을 수 없습니다.' });
       return;
     }
-    
+
     res.status(StatusCodes.OK).json({ board });
   } catch (error) {
     logger.error('게시판 상세 조회 오류:', error);
@@ -60,32 +62,32 @@ export const createBoard = async (req: RequestWithClub, res: Response) => {
     const { name, description } = req.body;
     const clubId = req.params.clubId;
     const userId = req.user?.userId;
-    
+
     // 이름 중복 확인
-    const existingBoard = await Board.findOne({ 
-      name, 
-      club: clubId 
+    const existingBoard = await Board.findOne({
+      name,
+      club: clubId,
     });
-    
+
     if (existingBoard) {
       res
         .status(StatusCodes.BAD_REQUEST)
         .json({ message: '이미 동일한 이름의 게시판이 존재합니다.' });
       return;
     }
-    
+
     const board = new Board({
       name,
       description,
       club: clubId,
-      createdBy: userId
+      createdBy: userId,
     });
-    
+
     await board.save();
-    
-    res.status(StatusCodes.CREATED).json({ 
+
+    res.status(StatusCodes.CREATED).json({
       message: '게시판이 생성되었습니다.',
-      board 
+      board,
     });
   } catch (error) {
     logger.error('게시판 생성 오류:', error);
@@ -101,44 +103,44 @@ export const updateBoard = async (req: Request, res: Response) => {
     const { name, description, isActive } = req.body;
     const boardId = req.params.boardId;
     const clubId = req.params.clubId;
-    
+
     // 게시판 존재 확인
     const board = await Board.findById(boardId);
-    
+
     if (!board) {
       res
         .status(StatusCodes.NOT_FOUND)
         .json({ message: '게시판을 찾을 수 없습니다.' });
       return;
     }
-    
+
     // 이름 변경 시 중복 확인
     if (name && name !== board.name) {
-      const existingBoard = await Board.findOne({ 
-        name, 
+      const existingBoard = await Board.findOne({
+        name,
         club: clubId,
-        _id: { $ne: boardId } // 현재 게시판 제외
+        _id: { $ne: boardId }, // 현재 게시판 제외
       });
-      
+
       if (existingBoard) {
         res
           .status(StatusCodes.BAD_REQUEST)
           .json({ message: '이미 동일한 이름의 게시판이 존재합니다.' });
         return;
       }
-      
+
       board.name = name;
     }
-    
+
     // 다른 필드 업데이트
     if (description !== undefined) board.description = description;
     if (isActive !== undefined) board.isActive = isActive;
-    
+
     await board.save();
-    
-    res.status(StatusCodes.OK).json({ 
+
+    res.status(StatusCodes.OK).json({
       message: '게시판이 수정되었습니다.',
-      board 
+      board,
     });
   } catch (error) {
     logger.error('게시판 수정 오류:', error);
@@ -152,10 +154,10 @@ export const updateBoard = async (req: Request, res: Response) => {
 export const deleteBoard = async (req: Request, res: Response) => {
   try {
     const boardId = req.params.boardId;
-    
+
     // 게시판 존재 확인
     const board = await Board.findById(boardId);
-    
+
     if (!board) {
       res
         .status(StatusCodes.NOT_FOUND)
@@ -166,9 +168,9 @@ export const deleteBoard = async (req: Request, res: Response) => {
     // 소프트 삭제 (isActive = false)
     board.isActive = false;
     await board.save();
-    
-    res.status(StatusCodes.OK).json({ 
-      message: '게시판이 삭제되었습니다.' 
+
+    res.status(StatusCodes.OK).json({
+      message: '게시판이 삭제되었습니다.',
     });
   } catch (error) {
     logger.error('게시판 삭제 오류:', error);
@@ -176,4 +178,4 @@ export const deleteBoard = async (req: Request, res: Response) => {
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: '게시판 삭제 중 오류가 발생했습니다.' });
   }
-}; 
+};

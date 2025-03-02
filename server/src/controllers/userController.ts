@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import User, { UserRole } from '../models/User';
+import Club, { ClubMemberRole } from '../models/Club';
 import { logger } from '../utils/logger';
 import jwt from 'jsonwebtoken';
 
@@ -39,10 +40,13 @@ export const getUserById = async (req: Request, res: Response) => {
 // 사용자 생성
 export const createUser = async (req: Request, res: Response) => {
   try {
-    const { username, email, password, firstName, lastName, role } = req.body;
+    const { username, email, password, firstName, lastName, role } =
+      req.body;
 
     // 이메일 중복 확인
-    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    const existingUser = await User.findOne({
+      $or: [{ email }, { username }],
+    });
     if (existingUser) {
       res.status(StatusCodes.BAD_REQUEST).json({
         message: '이미 사용 중인 이메일 또는 사용자 이름입니다.',
@@ -51,7 +55,8 @@ export const createUser = async (req: Request, res: Response) => {
     }
 
     // 관리자 역할 검증 (필요한 경우)
-    const userRole = role === UserRole.ADMIN ? UserRole.ADMIN : UserRole.USER;
+    const userRole =
+      role === UserRole.ADMIN ? UserRole.ADMIN : UserRole.USER;
 
     const user = await User.create({
       username,
@@ -187,7 +192,9 @@ export const deleteUser = async (req: Request, res: Response) => {
 
     await User.findByIdAndDelete(userId);
 
-    res.status(StatusCodes.OK).json({ message: '사용자가 삭제되었습니다.' });
+    res
+      .status(StatusCodes.OK)
+      .json({ message: '사용자가 삭제되었습니다.' });
   } catch (error) {
     logger.error('사용자 삭제 오류:', error);
     res
@@ -285,11 +292,67 @@ export const changePassword = async (req: Request, res: Response) => {
     user.password = newPassword;
     await user.save();
 
-    res.status(StatusCodes.OK).json({ message: '비밀번호가 변경되었습니다.' });
+    res
+      .status(StatusCodes.OK)
+      .json({ message: '비밀번호가 변경되었습니다.' });
   } catch (error) {
     logger.error('비밀번호 변경 오류:', error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: '비밀번호 변경 중 오류가 발생했습니다.' });
+  }
+};
+
+// 사용자가 속한 동아리 목록 조회
+export const getUserClubs = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id || req.user?.userId;
+    const { role } = req.query;
+
+    // 기본 쿼리: 사용자가 멤버인 동아리 검색
+    const query: any = {
+      $or: [
+        { 'members.user': userId },
+        { owner: userId }, // 소유한 동아리도 포함
+      ],
+      isActive: true,
+    };
+
+    // 특정 역할로 필터링하는 경우
+    if (role) {
+      query['members.role'] = role;
+    }
+
+    const clubs = await Club.find(query)
+      .populate('owner', 'username email profileImage')
+      .sort({ createdAt: -1 });
+
+    res.status(StatusCodes.OK).json({ clubs });
+  } catch (error) {
+    logger.error('사용자 동아리 조회 오류:', error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: '사용자 동아리 조회 중 오류가 발생했습니다.' });
+  }
+};
+
+// 사용자가 소유한 동아리 목록 조회 (소유자인 동아리만)
+export const getUserOwnedClubs = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id || req.user?.userId;
+
+    const clubs = await Club.find({
+      owner: userId,
+      isActive: true,
+    })
+      .populate('owner', 'username email profileImage')
+      .sort({ createdAt: -1 });
+
+    res.status(StatusCodes.OK).json({ clubs });
+  } catch (error) {
+    logger.error('사용자 소유 동아리 조회 오류:', error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: '사용자 소유 동아리 조회 중 오류가 발생했습니다.' });
   }
 };

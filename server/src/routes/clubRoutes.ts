@@ -146,39 +146,94 @@ router.get('/', getAllClubs);
  *                       type: integer
  *                     userMembershipStatus:
  *                       type: string
+ *                     allMembers:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           user:
+ *                             type: object
+ *                             properties:
+ *                               _id:
+ *                                 type: string
+ *                               username:
+ *                                 type: string
+ *                               email:
+ *                                 type: string
+ *                               profileImage:
+ *                                 type: string
+ *                           role:
+ *                             type: string
+ *                             enum: [owner, admin, member, pending]
+ *                           joinedAt:
+ *                             type: string
+ *                             format: date-time
  *                     admins:
  *                       type: array
  *                       items:
  *                         type: object
  *                         properties:
- *                           username:
+ *                           user:
+ *                             type: object
+ *                             properties:
+ *                               _id:
+ *                                 type: string
+ *                               username:
+ *                                 type: string
+ *                               email:
+ *                                 type: string
+ *                               profileImage:
+ *                                 type: string
+ *                           role:
  *                             type: string
- *                           email:
+ *                             enum: [owner, admin, member, pending]
+ *                           joinedAt:
  *                             type: string
- *                           profileImage:
- *                             type: string
+ *                             format: date-time
  *                     members:
  *                       type: array
  *                       items:
  *                         type: object
  *                         properties:
- *                           username:
+ *                           user:
+ *                             type: object
+ *                             properties:
+ *                               _id:
+ *                                 type: string
+ *                               username:
+ *                                 type: string
+ *                               email:
+ *                                 type: string
+ *                               profileImage:
+ *                                 type: string
+ *                           role:
  *                             type: string
- *                           email:
+ *                             enum: [owner, admin, member, pending]
+ *                           joinedAt:
  *                             type: string
- *                           profileImage:
- *                             type: string
+ *                             format: date-time
  *                     pendingMembers:
  *                       type: array
  *                       items:
  *                         type: object
  *                         properties:
- *                           username:
+ *                           user:
+ *                             type: object
+ *                             properties:
+ *                               _id:
+ *                                 type: string
+ *                               username:
+ *                                 type: string
+ *                               email:
+ *                                 type: string
+ *                               profileImage:
+ *                                 type: string
+ *                           role:
  *                             type: string
- *                           email:
+ *                             enum: [owner, admin, member, pending]
+ *                           joinedAt:
  *                             type: string
- *                           profileImage:
- *                             type: string
+ *                             format: date-time
  *                     createdAt:
  *                       type: string
  *                       format: date-time

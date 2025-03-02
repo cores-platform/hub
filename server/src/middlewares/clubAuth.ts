@@ -14,7 +14,7 @@ export const isClubOwner = async (
   next: NextFunction
 ) => {
   try {
-    const clubId = req.params.id;
+    const clubId = req.params.clubId;
     const userId = req.user?.userId;
 
     const club = await Club.findById(clubId);
@@ -49,7 +49,7 @@ export const isClubAdmin = async (
   next: NextFunction
 ) => {
   try {
-    const clubId = req.params.id;
+    const clubId = req.params.clubId;
     const userId = req.user?.userId;
 
     const club = await Club.findById(clubId);
@@ -98,7 +98,7 @@ export const isClubMember = async (
   next: NextFunction
 ) => {
   try {
-    const clubId = req.params.id;
+    const clubId = req.params.clubId;
     const userId = req.user?.userId;
 
     const club = await Club.findById(clubId);

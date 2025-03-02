@@ -152,11 +152,11 @@ const router = express.Router();
  *                   type: string
  *                   example: '동아리 업데이트 중 오류가 발생했습니다.'
  */
-router.put('/:id', authenticate, isClubOwner, updateClub);
+router.put('/:clubId', authenticate, isClubOwner, updateClub);
 
 /**
  * @swagger
- * /api/clubs/{id}/transfer-ownership:
+ * /api/clubs/{clubId}/transfer-ownership:
  *   post:
  *     summary: 동아리 소유권 이전
  *     description: 동아리 소유자가 다른 회원에게 소유권을 이전합니다. 기존 소유자는 관리자가 됩니다.
@@ -165,7 +165,7 @@ router.put('/:id', authenticate, isClubOwner, updateClub);
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: clubId
  *         required: true
  *         schema:
  *           type: string
@@ -236,7 +236,7 @@ router.put('/:id', authenticate, isClubOwner, updateClub);
  *                   example: '동아리 소유권 이전 중 오류가 발생했습니다.'
  */
 router.post(
-  '/:id/transfer-ownership',
+  '/:clubId/transfer-ownership',
   authenticate,
   isClubOwner,
   transferOwnership
@@ -244,7 +244,7 @@ router.post(
 
 /**
  * @swagger
- * /api/clubs/{id}:
+ * /api/clubs/{clubId}:
  *   delete:
  *     summary: 동아리 삭제
  *     description: 동아리 소유자가 자신의 동아리를 삭제합니다. 이 작업은 되돌릴 수 없습니다.
@@ -253,7 +253,7 @@ router.post(
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: clubId
  *         required: true
  *         schema:
  *           type: string
@@ -299,11 +299,11 @@ router.post(
  *                   type: string
  *                   example: '동아리 삭제 중 오류가 발생했습니다.'
  */
-router.delete('/:id', authenticate, isClubOwner, deleteClub);
+router.delete('/:clubId', authenticate, isClubOwner, deleteClub);
 
 /**
  * @swagger
- * /api/clubs/{id}/approve:
+ * /api/clubs/{clubId}/approve:
  *   post:
  *     summary: 회원 가입 승인
  *     description: 동아리 관리자가 가입 대기 중인 사용자의 가입을 승인합니다.
@@ -312,7 +312,7 @@ router.delete('/:id', authenticate, isClubOwner, deleteClub);
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: clubId
  *         required: true
  *         schema:
  *           type: string
@@ -391,11 +391,16 @@ router.delete('/:id', authenticate, isClubOwner, deleteClub);
  *                   type: string
  *                   example: '가입 승인 중 오류가 발생했습니다.'
  */
-router.post('/:id/approve', authenticate, isClubAdmin, approveJoinRequest);
+router.post(
+  '/:clubId/approve',
+  authenticate,
+  isClubAdmin,
+  approveJoinRequest
+);
 
 /**
  * @swagger
- * /api/clubs/{id}/reject:
+ * /api/clubs/{clubId}/reject:
  *   post:
  *     summary: 회원 가입 거부
  *     description: 동아리 관리자가 가입 대기 중인 사용자의 가입을 거부합니다.
@@ -404,7 +409,7 @@ router.post('/:id/approve', authenticate, isClubAdmin, approveJoinRequest);
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: clubId
  *         required: true
  *         schema:
  *           type: string
@@ -472,11 +477,16 @@ router.post('/:id/approve', authenticate, isClubAdmin, approveJoinRequest);
  *                   type: string
  *                   example: '가입 거부 중 오류가 발생했습니다.'
  */
-router.post('/:id/reject', authenticate, isClubAdmin, rejectJoinRequest);
+router.post(
+  '/:clubId/reject',
+  authenticate,
+  isClubAdmin,
+  rejectJoinRequest
+);
 
 /**
  * @swagger
- * /api/clubs/{id}/kick:
+ * /api/clubs/{clubId}/kick:
  *   post:
  *     summary: 회원 추방
  *     description: 동아리 관리자가 회원을 추방합니다. 소유자는 추방할 수 없으며, 일반 관리자는 다른 관리자를 추방할 수 없습니다.
@@ -485,7 +495,7 @@ router.post('/:id/reject', authenticate, isClubAdmin, rejectJoinRequest);
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: clubId
  *         required: true
  *         schema:
  *           type: string
@@ -553,11 +563,11 @@ router.post('/:id/reject', authenticate, isClubAdmin, rejectJoinRequest);
  *                   type: string
  *                   example: '회원 추방 중 오류가 발생했습니다.'
  */
-router.post('/:id/kick', authenticate, isClubAdmin, kickMember);
+router.post('/:clubId/kick', authenticate, isClubAdmin, kickMember);
 
 /**
  * @swagger
- * /api/clubs/{id}/promote:
+ * /api/clubs/{clubId}/promote:
  *   post:
  *     summary: 일반 회원을 관리자로 승격
  *     description: 동아리 소유자가 일반 회원을 관리자로 승격시킵니다.
@@ -566,7 +576,7 @@ router.post('/:id/kick', authenticate, isClubAdmin, kickMember);
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: clubId
  *         required: true
  *         schema:
  *           type: string
@@ -645,11 +655,11 @@ router.post('/:id/kick', authenticate, isClubAdmin, kickMember);
  *                   type: string
  *                   example: '관리자 임명 중 오류가 발생했습니다.'
  */
-router.post('/:id/promote', authenticate, isClubOwner, promoteToAdmin);
+router.post('/:clubId/promote', authenticate, isClubOwner, promoteToAdmin);
 
 /**
  * @swagger
- * /api/clubs/{id}/demote:
+ * /api/clubs/{clubId}/demote:
  *   post:
  *     summary: 관리자를 일반 회원으로 강등
  *     description: 동아리 소유자가 관리자를 일반 회원으로 강등시킵니다.
@@ -658,7 +668,7 @@ router.post('/:id/promote', authenticate, isClubOwner, promoteToAdmin);
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: clubId
  *         required: true
  *         schema:
  *           type: string
@@ -737,6 +747,6 @@ router.post('/:id/promote', authenticate, isClubOwner, promoteToAdmin);
  *                   type: string
  *                   example: '관리자 해임 중 오류가 발생했습니다.'
  */
-router.post('/:id/demote', authenticate, isClubOwner, demoteFromAdmin);
+router.post('/:clubId/demote', authenticate, isClubOwner, demoteFromAdmin);
 
 export default router;
