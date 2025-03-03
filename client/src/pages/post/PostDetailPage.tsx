@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { ArrowLeft, Edit, Trash2, ThumbsUp } from 'lucide-react';
-import MDEditor from '@uiw/react-md-editor';
+
+import EditorJSComponent from '@/components/editor/EditorJS';
 import { Button } from '@/components/ui/button';
 import { usePostStore } from '@/store/postStore';
 import { useAuthStore } from '@/store/authStore';
@@ -20,6 +21,61 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 
+// 포스트 데이터 파싱 함수
+const parsePostContent = (content: string | undefined) => {
+  if (!content) return { blocks: [] };
+
+  try {
+    // JSON 문자열인 경우 파싱
+    if (
+      typeof content === 'string' &&
+      content.startsWith('{') &&
+      content.endsWith('}')
+    ) {
+      const parsedData = JSON.parse(content);
+
+      // 유효한 Editor.js 데이터 구조인지 확인
+      if (parsedData && Array.isArray(parsedData.blocks)) {
+        // 각 블록의 데이터 구조 검증
+        const validBlocks = parsedData.blocks.map((block: any) => {
+          if (!block.data) block.data = {};
+
+          // paragraph 블록에 text 필드가 없는 경우 추가
+          if (block.type === 'paragraph' && block.data.text === undefined) {
+            block.data.text = '';
+          }
+
+          return block;
+        });
+
+        return {
+          ...parsedData,
+          blocks: validBlocks,
+        };
+      }
+    }
+
+    // 일반 텍스트인 경우 paragraph 블록으로 변환
+    // 각 줄을 별도의 paragraph로 처리
+    const paragraphs = content.split('\n\n').filter(Boolean);
+    const blocks =
+      paragraphs.length > 0
+        ? paragraphs.map((text) => ({
+            type: 'paragraph',
+            data: { text },
+          }))
+        : [{ type: 'paragraph', data: { text: content } }];
+
+    return { blocks };
+  } catch (error) {
+    console.error('Content parsing error:', error);
+    // 파싱 실패 시 단일 paragraph 블록으로 저장
+    return {
+      blocks: [{ type: 'paragraph', data: { text: content } }],
+    };
+  }
+};
+
 export default function PostDetailPage() {
   const { clubId, boardId, postId } = useParams<{
     clubId: string;
@@ -33,6 +89,15 @@ export default function PostDetailPage() {
     usePostStore();
   const { user } = useAuthStore();
 
+  // 인스턴스 ID를 사용하여 에디터 고유 식별
+  const editorInstanceId = useMemo(
+    () => `editor-view-${currentPost?._id || 'unknown'}-${Date.now()}`,
+    [currentPost?._id]
+  );
+
+  // 게시글 내용을 EditorJS 형식으로
+  const [editorData, setEditorData] = useState<any>({ blocks: [] });
+
   useEffect(() => {
     if (clubId && boardId && postId) {
       fetchPostById(clubId, boardId, postId).catch(() => {
@@ -41,6 +106,12 @@ export default function PostDetailPage() {
       });
     }
   }, [clubId, boardId, postId, fetchPostById, navigate]);
+
+  useEffect(() => {
+    if (currentPost?.content) {
+      setEditorData(parsePostContent(currentPost.content));
+    }
+  }, [currentPost?.content]);
 
   const handleDelete = async () => {
     if (!clubId || !boardId || !postId) return;
@@ -119,15 +190,28 @@ export default function PostDetailPage() {
             <div>조회수: {currentPost.views}</div>
           </div>
 
-          <div
-            className="prose dark:prose-invert max-w-none"
-            data-color-mode="dark"
-          >
-            <MDEditor.Markdown
-              source={currentPost.content}
-              style={{ whiteSpace: 'normal', overflow: 'visible' }}
-              className="p-4"
-            />
+          <div className="mt-4 prose dark:prose-invert max-w-none">
+            {isLoading ? (
+              <>
+                <Skeleton className="h-4 w-3/4 mb-2" />
+                <Skeleton className="h-4 w-full mb-2" />
+                <Skeleton className="h-4 w-2/3 mb-2" />
+              </>
+            ) : (
+              <div className="border rounded-md p-4">
+                {currentPost?.content && !isLoading && (
+                  <div className="static-editor-container">
+                    <EditorJSComponent
+                      key={editorInstanceId}
+                      data={editorData}
+                      onChange={() => {}}
+                      placeholder="내용을 확인하세요"
+                      readOnly={true}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="flex justify-center mt-8">

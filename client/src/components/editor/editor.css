@@ -1,0 +1,164 @@
+/* Editor.js 스타일 */
+.ce-block__content {
+  max-width: 100%;
+  margin: 0;
+}
+
+.ce-toolbar__content {
+  max-width: 100%;
+  margin: 0;
+}
+
+.codex-editor {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  min-height: 400px;
+}
+
+/* 읽기 전용 에디터는 높이 제한 없음 */
+.codex-editor[contenteditable='false'] {
+  min-height: auto;
+  border: none;
+  padding: 0;
+}
+
+/* 에디터 중복 문제 해결을 위한 스타일 */
+.editor-js-wrapper {
+  position: relative;
+}
+
+.editor-container,
+.static-editor-container {
+  position: relative;
+  width: 100%;
+}
+
+.static-editor-container .codex-editor {
+  border: none;
+  padding: 0;
+  min-height: auto;
+}
+
+/* 에디터 컨테이너가 중복 표시되는 것 방지 */
+.editor-js-container[data-initialized='true'] .codex-editor {
+  display: block;
+}
+
+.editor-js-container[data-initialized='false'] .codex-editor {
+  display: none;
+}
+
+.codex-editor--empty .ce-block:first-child .ce-paragraph {
+  color: #a0aec0;
+}
+
+/* 다크 모드 지원 */
+.dark .codex-editor {
+  border-color: #4a5568;
+  background-color: #1a202c;
+  color: #e2e8f0;
+}
+
+.dark .ce-toolbar__plus,
+.dark .ce-toolbar__settings-btn {
+  color: #e2e8f0;
+  background-color: #2d3748;
+}
+
+.dark .ce-toolbar__plus:hover,
+.dark .ce-toolbar__settings-btn:hover {
+  background-color: #4a5568;
+}
+
+.dark .ce-inline-toolbar,
+.dark .ce-conversion-toolbar,
+.dark .ce-settings {
+  background-color: #2d3748;
+  color: #e2e8f0;
+  border-color: #4a5568;
+}
+
+.dark .ce-inline-tool,
+.dark .ce-conversion-tool,
+.dark .ce-settings__button {
+  color: #e2e8f0;
+}
+
+.dark .ce-inline-tool:hover,
+.dark .ce-conversion-tool:hover,
+.dark .ce-settings__button:hover {
+  background-color: #4a5568;
+}
+
+/* 한국어 폰트 지원 */
+.codex-editor {
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* 테이블 스타일 */
+.tc-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tc-table__cell {
+  border: 1px solid #e2e8f0;
+  padding: 0.5rem;
+}
+
+.dark .tc-table__cell {
+  border-color: #4a5568;
+}
+
+/* 코드 블록 스타일 */
+.ce-code {
+  background-color: #f7fafc;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo,
+    monospace;
+}
+
+.dark .ce-code {
+  background-color: #2d3748;
+}
+
+/* 인용구 스타일 */
+.cdx-quote {
+  padding-left: 1rem;
+  border-left: 3px solid #e2e8f0;
+}
+
+.dark .cdx-quote {
+  border-left-color: #4a5568;
+}
+
+/* 체크리스트 스타일 */
+.cdx-checklist__item-checkbox {
+  border-color: #e2e8f0;
+}
+
+.dark .cdx-checklist__item-checkbox {
+  border-color: #4a5568;
+}
+
+/* 구분선 스타일 */
+.ce-delimiter {
+  line-height: 1.6em;
+  text-align: center;
+}
+
+.ce-delimiter:before {
+  content: '';
+  display: inline-block;
+  width: 30px;
+  height: 1px;
+  background-color: #e2e8f0;
+  margin: 0 6px;
+}
+
+.dark .ce-delimiter:before {
+  background-color: #4a5568;
+}
