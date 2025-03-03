@@ -34,7 +34,7 @@ export default function CreateBoardPage() {
   };
 
   return (
-    <div className="container max-w-2xl py-6">
+    <div className="container max-w-2xl p-6">
       <div className="mb-6">
         <Button
           variant="ghost"

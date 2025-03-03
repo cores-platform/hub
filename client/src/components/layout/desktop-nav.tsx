@@ -15,12 +15,6 @@ export function DesktopNav() {
       >
         동아리 찾기
       </Link>
-      <Link
-        to="/about"
-        className="text-sm font-medium hover:text-primary"
-      >
-        소개
-      </Link>
     </nav>
   );
 }

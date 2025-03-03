@@ -10,7 +10,7 @@ import {
   Users,
 } from '@/components/icons';
 import { MobileThemeSelector } from '@/components/theme/mobile-theme-selector';
-import { ClubIcon, EventIcon, AboutIcon } from '@/components/icons';
+import { ClubIcon, EventIcon } from '@/components/icons';
 
 interface MobileNavProps {
   isAuthenticated: boolean;
@@ -40,13 +40,6 @@ export function MobileNav({ isAuthenticated, onLogout }: MobileNavProps) {
         >
           <EventIcon className="h-5 w-5" />
           이벤트
-        </Link>
-        <Link
-          to="/about"
-          className="flex items-center gap-2 p-2 hover:bg-muted rounded-md"
-        >
-          <AboutIcon className="h-5 w-5" />
-          소개
         </Link>
 
         <hr className="my-2 border-t dark:border-gray-800" />
