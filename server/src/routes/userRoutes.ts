@@ -58,6 +58,9 @@ const router = express.Router();
  *             schema:
  *               type: object
  *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: JWT 인증 토큰
  *                 user:
  *                   type: object
  *                   properties:

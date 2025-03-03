@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Club } from '@/lib/api';
+import { Club } from '@/lib/api-club';
 import {
   Card,
   CardContent,

@@ -363,11 +363,6 @@ export default function ClubManagementPage() {
     return null;
   }
 
-  // 회원 필터링
-  const pendingMembers = currentClub.members.filter(
-    (member) => member.role === ClubMemberRole.PENDING
-  );
-
   return (
     <div className="container mx-auto py-10 px-4">
       <div className="flex justify-between items-center mb-6">

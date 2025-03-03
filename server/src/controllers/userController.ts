@@ -67,6 +67,13 @@ export const createUser = async (req: Request, res: Response) => {
       role: userRole,
     });
 
+    // JWT 토큰 생성
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      process.env.JWT_SECRET || 'your-secret-key',
+      { expiresIn: '1d' }
+    );
+
     // 비밀번호 제외하고 응답
     const userResponse = {
       _id: user._id,
@@ -77,7 +84,10 @@ export const createUser = async (req: Request, res: Response) => {
       role: user.role,
     };
 
-    res.status(StatusCodes.CREATED).json({ user: userResponse });
+    res.status(StatusCodes.CREATED).json({
+      token,
+      user: userResponse,
+    });
   } catch (error) {
     logger.error('사용자 생성 오류:', error);
     res

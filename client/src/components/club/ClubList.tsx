@@ -1,4 +1,4 @@
-import { Club } from '@/lib/api';
+import { Club } from '@/lib/api-club';
 import { ClubCard } from './ClubCard';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';

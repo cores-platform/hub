@@ -5,13 +5,10 @@ export default function NotFoundPage() {
   return (
     <div className="container mx-auto py-20 text-center">
       <div className="space-y-8">
-        <h1 className="text-9xl font-bold text-primary">404</h1>
-        <h2 className="text-3xl font-semibold">
-          페이지를 찾을 수 없습니다
-        </h2>
+        <h1 className="text-9xl font-bold text-primary">🚧</h1>
+        <h2 className="text-3xl font-semibold">페이지 제작 중입니다</h2>
         <p className="text-xl text-muted-foreground max-w-md mx-auto">
-          찾으시는 페이지가 존재하지 않거나, 이동되었거나, 삭제되었을 수
-          있습니다.
+          현재 이 페이지는 개발 중입니다. 곧 완성된 페이지로 찾아뵙겠습니다.
         </p>
         <Button
           size="lg"

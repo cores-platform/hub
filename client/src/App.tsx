@@ -20,13 +20,13 @@ import ClubDetailPage from '@/pages/ClubDetailPage';
 import ClubManagementPage from '@/pages/ClubManagementPage';
 import ClubAppPage from '@/pages/ClubAppPage';
 import BoardsOverviewPage from '@/pages/board/BoardsOverviewPage';
-import BoardDetailPage from '@/pages/board/BoardDetailPage';
 import CreateBoardPage from '@/pages/board/CreateBoardPage';
 import EditBoardPage from '@/pages/board/EditBoardPage';
 import BoardPostsPage from './pages/post/BoardPostsPage';
 import PostDetailPage from './pages/post/PostDetailPage';
 import CreatePostPage from './pages/post/CreatePostPage';
 import EditPostPage from './pages/post/EditPostPage';
+import ClubCreatePage from './pages/ClubCreatePage';
 
 function App() {
   const checkAuth = useAuthStore((state) => state.checkAuth);
@@ -62,6 +62,10 @@ function App() {
               <Route
                 index
                 element={<ClubsPage />}
+              />
+              <Route
+                path="create"
+                element={<ClubCreatePage />}
               />
               <Route
                 path=":clubId"
@@ -109,14 +113,14 @@ function App() {
                   element={<EditBoardPage />}
                 />
               </Route>
-              <Route
+              {/* <Route
                 path="create"
                 element={<div>동아리 생성 페이지</div>}
-              />
-              <Route
+              /> */}
+              {/* <Route
                 path=":clubId/edit"
                 element={<div>동아리 수정 페이지</div>}
-              />
+              /> */}
             </Route>
 
             {/* 프로필 관련 라우팅 */}
@@ -138,10 +142,10 @@ function App() {
             />
 
             {/* 소개 페이지 */}
-            <Route
+            {/* <Route
               path="about"
               element={<div>소개 페이지</div>}
-            />
+            /> */}
 
             {/* 기타 페이지 */}
             <Route

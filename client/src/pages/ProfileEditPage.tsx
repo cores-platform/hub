@@ -9,7 +9,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -55,7 +54,7 @@ export default function ProfileEditPage() {
   const fetchMyProfile = useUserStore((state) => state.fetchMyProfile);
   const updateProfile = useUserStore((state) => state.updateProfile);
   const isLoading = useUserStore((state) => state.isLoading);
-  const error = useUserStore((state) => state.error);
+  // const error = useUserStore((state) => state.error);
 
   // 로그인 여부 확인
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);

@@ -9,7 +9,16 @@ type Theme =
   | 'blue'
   | 'green'
   | 'orange'
-  | 'system';
+  | 'cyberpunk'
+  | 'discord'
+  | 'nord'
+  | 'dracula'
+  | 'monokai'
+  | 'solarized'
+  | 'github'
+  | 'retro'
+  | 'pastel'
+  | 'neon';
 
 interface ThemeProviderProps {
   children: React.ReactNode;
@@ -44,17 +53,18 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
       'purple',
       'blue',
       'green',
-      'orange'
+      'orange',
+      'cyberpunk',
+      'discord',
+      'nord',
+      'dracula',
+      'monokai',
+      'solarized',
+      'github',
+      'retro',
+      'pastel',
+      'neon'
     );
-
-    if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
-        .matches
-        ? 'dark'
-        : 'light';
-      root.classList.add(systemTheme);
-      return;
-    }
 
     root.classList.add(theme);
   }, [theme]);

@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ClubIcon } from '@/components/icons';
+import { Globe } from '@/components/icons';
 import { useClubStore } from '@/store/clubStore';
 
 export default function HomePage() {
@@ -75,7 +75,9 @@ export default function HomePage() {
                             className="w-6 h-6 rounded-full"
                           />
                         ) : (
-                          <ClubIcon className="w-6 h-6" />
+                          <>
+                            <Globe />
+                          </>
                         )}
                         {club.name}
                       </CardTitle>

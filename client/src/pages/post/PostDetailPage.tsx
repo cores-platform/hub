@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { ArrowLeft, Edit, Trash2, ThumbsUp } from 'lucide-react';
@@ -104,7 +104,7 @@ export default function PostDetailPage() {
         목록으로
       </Button>
 
-      <div className="border rounded-lg overflow-hidden bg-card">
+      <div className="border rounded-lg bg-card">
         <div className="p-6">
           <h1 className="text-2xl font-bold mb-2">{currentPost.title}</h1>
 
@@ -125,10 +125,8 @@ export default function PostDetailPage() {
           >
             <MDEditor.Markdown
               source={currentPost.content}
+              style={{ whiteSpace: 'normal', overflow: 'visible' }}
               className="p-4"
-              style={{
-                backgroundColor: 'transparent',
-              }}
             />
           </div>
 

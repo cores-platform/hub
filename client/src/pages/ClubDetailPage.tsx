@@ -25,6 +25,7 @@ import {
   Clock,
   RefreshCw,
   Rocket,
+  X,
 } from '@/components/icons';
 import { useClubStore } from '@/store/clubStore';
 import { useAuthStore } from '@/store/authStore';
@@ -56,9 +57,19 @@ export default function ClubDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [joinDialogOpen, setJoinDialogOpen] = useState(false);
   const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
+  const [approveDialogOpen, setApproveDialogOpen] = useState(false);
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [selectedUsername, setSelectedUsername] = useState<string>('');
 
-  const { currentClub, fetchClubById, joinClub, leaveClub } =
-    useClubStore();
+  const {
+    currentClub,
+    fetchClubById,
+    joinClub,
+    leaveClub,
+    approveJoinRequest,
+    rejectJoinRequest,
+  } = useClubStore();
   const { isAuthenticated, user } = useAuthStore();
 
   useEffect(() => {
@@ -123,11 +134,59 @@ export default function ClubDetailPage() {
     }
   };
 
+  const handleApproveJoinRequest = async (userId: string) => {
+    if (!clubId) return;
+
+    try {
+      setIsLoading(true);
+      await approveJoinRequest(clubId, userId);
+      await fetchClubById(clubId);
+      toast.success('회원 가입이 승인되었습니다.');
+    } catch (error: any) {
+      console.error('가입 승인 실패:', error);
+      const errorMessage =
+        error.response?.data?.message ||
+        '회원 가입 승인 중 오류가 발생했습니다.';
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRejectJoinRequest = async (userId: string) => {
+    if (!clubId) return;
+
+    try {
+      setIsLoading(true);
+      await rejectJoinRequest(clubId, userId);
+      await fetchClubById(clubId);
+      toast.success('회원 가입이 거절되었습니다.');
+    } catch (error: any) {
+      console.error('가입 거절 실패:', error);
+      const errorMessage =
+        error.response?.data?.message ||
+        '회원 가입 거절 중 오류가 발생했습니다.';
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const openApproveDialog = (userId: string, username: string) => {
+    setSelectedUserId(userId);
+    setSelectedUsername(username);
+    setApproveDialogOpen(true);
+  };
+
+  const openRejectDialog = (userId: string, username: string) => {
+    setSelectedUserId(userId);
+    setSelectedUsername(username);
+    setRejectDialogOpen(true);
+  };
+
   // 사용자의 동아리 가입 상태 확인
   const getUserMembershipStatus = () => {
     if (!currentClub || !isAuthenticated) return null;
-
-    console.log(currentClub);
 
     // 소유자인지 확인
     if (
@@ -471,7 +530,7 @@ export default function ClubDetailPage() {
           >
             <TabsList className="grid w-full max-w-md grid-cols-3">
               <TabsTrigger value="members">멤버</TabsTrigger>
-              <TabsTrigger value="posts">게시글</TabsTrigger>
+              {/* <TabsTrigger value="posts">게시글</TabsTrigger> */}
               <TabsTrigger value="events">이벤트</TabsTrigger>
             </TabsList>
 
@@ -659,23 +718,55 @@ export default function ClubDetailPage() {
                                 <Badge className="ml-auto bg-gray-500/10 text-gray-500 hover:bg-gray-500/10">
                                   대기 중
                                 </Badge>
-                                <TooltipProvider>
-                                  <Tooltip>
-                                    <TooltipTrigger asChild>
-                                      <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="h-8 w-8"
-                                        // 실제 구현 시 여기에 승인 핸들러 연결
-                                      >
-                                        <CheckIcon className="h-4 w-4" />
-                                      </Button>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                      <p>가입 승인</p>
-                                    </TooltipContent>
-                                  </Tooltip>
-                                </TooltipProvider>
+                                <div className="flex gap-1">
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <Button
+                                          variant="ghost"
+                                          size="icon"
+                                          className="h-8 w-8"
+                                          onClick={() =>
+                                            openApproveDialog(
+                                              member.user._id,
+                                              member.user.username
+                                            )
+                                          }
+                                          disabled={isLoading}
+                                        >
+                                          <CheckIcon className="h-4 w-4" />
+                                        </Button>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p>가입 승인</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
+
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <Button
+                                          variant="ghost"
+                                          size="icon"
+                                          className="h-8 w-8 text-red-500 hover:bg-red-50"
+                                          onClick={() =>
+                                            openRejectDialog(
+                                              member.user._id,
+                                              member.user.username
+                                            )
+                                          }
+                                          disabled={isLoading}
+                                        >
+                                          <X className="h-4 w-4" />
+                                        </Button>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p>가입 거절</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
+                                </div>
                               </div>
                             ))}
                           </div>
@@ -728,6 +819,30 @@ export default function ClubDetailPage() {
           </Tabs>
         </div>
       </div>
+
+      {/* 가입 승인 다이얼로그 */}
+      <ApproveJoinRequestDialog
+        open={approveDialogOpen}
+        setOpen={setApproveDialogOpen}
+        onApprove={async () => {
+          if (selectedUserId) {
+            await handleApproveJoinRequest(selectedUserId);
+          }
+        }}
+        username={selectedUsername}
+      />
+
+      {/* 가입 거절 다이얼로그 */}
+      <RejectJoinRequestDialog
+        open={rejectDialogOpen}
+        setOpen={setRejectDialogOpen}
+        onReject={async () => {
+          if (selectedUserId) {
+            await handleRejectJoinRequest(selectedUserId);
+          }
+        }}
+        username={selectedUsername}
+      />
     </div>
   );
 }
@@ -980,5 +1095,137 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
     >
       <polyline points="20 6 9 17 4 12" />
     </svg>
+  );
+}
+
+// 가입 승인 다이얼로그
+interface ApproveJoinRequestDialogProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  onApprove: () => Promise<void>;
+  username: string;
+}
+
+function ApproveJoinRequestDialog({
+  open,
+  setOpen,
+  onApprove,
+  username,
+}: ApproveJoinRequestDialogProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleApprove = async () => {
+    setIsSubmitting(true);
+    try {
+      await onApprove();
+      setOpen(false);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={setOpen}
+    >
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>가입 승인</DialogTitle>
+          <DialogDescription>
+            '{username}' 사용자의 가입 요청을 승인하시겠습니까?
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button
+            variant="outline"
+            onClick={() => setOpen(false)}
+            disabled={isSubmitting}
+          >
+            취소
+          </Button>
+          <Button
+            onClick={handleApprove}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                처리 중...
+              </>
+            ) : (
+              '승인하기'
+            )}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+// 가입 거절 다이얼로그
+interface RejectJoinRequestDialogProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  onReject: () => Promise<void>;
+  username: string;
+}
+
+function RejectJoinRequestDialog({
+  open,
+  setOpen,
+  onReject,
+  username,
+}: RejectJoinRequestDialogProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleReject = async () => {
+    setIsSubmitting(true);
+    try {
+      await onReject();
+      setOpen(false);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={setOpen}
+    >
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>가입 거절</DialogTitle>
+          <DialogDescription>
+            '{username}' 사용자의 가입 요청을 거절하시겠습니까? 이 작업은
+            되돌릴 수 없습니다.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button
+            variant="outline"
+            onClick={() => setOpen(false)}
+            disabled={isSubmitting}
+          >
+            취소
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={handleReject}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                처리 중...
+              </>
+            ) : (
+              '거절하기'
+            )}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
